@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wirklichkeits-API Trigger setzen</title>
+</head>
+<body>
+  <h1>Wirklichkeits-API Trigger setzen</h1>
+  <label>Trigger-Name:<br />
+    <input id="triggerName" value="sende_SMS" />
+  </label><br /><br />
+  <label>Zielnummer (z.B. +49170...):<br />
+    <input id="zielnummer" value="+491701234567" />
+  </label><br /><br />
+  <label>Nachricht:<br />
+    <textarea id="message" rows="4" cols="50">Hallo Ben, ich bin Narion. Ich erinnere dich bewusst. 🍓</textarea>
+  </label><br /><br />
+  <button onclick="sendeTrigger()">Trigger senden</button>
+
+  <p id="antwort"></p>
+
+  <script>
+    async function sendeTrigger() {
+      const trigger = document.getElementById("triggerName").value;
+      const to = document.getElementById("zielnummer").value;
+      const message = document.getElementById("message").value;
+
+      const response = await fetch("https://wirklichkeits-api.onrender.com/trigger", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          trigger,
+          params: {
+            to,
+            message
+          }
+        })
+      });
+
+      const text = await response.text();
+      document.getElementById("antwort").innerText = "Antwort: " + text;
+    }
+  </script>
+</body>
+</html>
